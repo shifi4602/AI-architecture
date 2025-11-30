@@ -1,4 +1,4 @@
-﻿
+
 async function GetIn() {
     const username = document.querySelector("#userName");
     const password = document.querySelector("#pass")
@@ -82,7 +82,7 @@ async function CheckPasswordStrength() {
     let password =  document.querySelector("#pass").value
     const progressBar = document.querySelector(".progressBar")
     try {
-        const response = await fetch('/api/passwords/CheckPasswordStrength`,
+        const response = await fetch('/api/passwords/CheckPasswordStrength',
             {
                 method: 'POST',
                 headers: {
@@ -103,10 +103,3 @@ async function CheckPasswordStrength() {
         console.log(e)
     }
 }
-
-
-  
-
-
-
-
