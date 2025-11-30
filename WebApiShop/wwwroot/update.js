@@ -1,9 +1,9 @@
-﻿async function update() {
+async function update() {
     const username = document.querySelector("#userName");
     const password = document.querySelector("#pass")
     const firstName = document.querySelector("#firstName")
     const lastName = document.querySelector("#lastName")
-    const q = JSON.parse(sessionStorage.getItem("User")
+    const q = JSON.parse(sessionStorage.getItem("User"))
     const updateData = {
         Email: username.value,
         Password: password.value,
