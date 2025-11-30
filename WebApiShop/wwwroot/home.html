@@ -25,16 +25,6 @@
             flex-direction: column
         }
 
-/*        .progressBar {
-            all: unset;
-            cursor: pointer;
-            border: solid black 0.5px;
-            height: 10px;
-            width: 180px;
-            border-radius: 8px;
-            background-color: transparent;
-        }*/
-
         .passLevel {
             border: solid black 0.5px;
             height: 50px;
@@ -61,10 +51,10 @@
             <h1>משתמש חדש</h1>
             <label for="userName">אימייל</label>
             <input type="email" id="userName" name="userName1" required />
-            <button class="passLevel" onclick="CheckPasswordStrength()">בדוק חוזק סיסמא</button>
-            <progress class="progressBar" max="100"></progress>
             <label for="pass">סיסמא</label>
             <input type="password" id="pass" name="pass1" required />
+            <button class="passLevel" onclick="CheckPasswordStrength()">בדוק חוזק סיסמא</button>
+            <progress class="progressBar" max="100"></progress>
             <label for="firstName">שם פרטי</label>
             <input type="text" id="firstName" name="firstName" required />
             <label for="lastName">שם משפחה</label>

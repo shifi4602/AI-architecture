@@ -43,6 +43,7 @@ async function GetIn() {
     let currentUser = JSON.parse(userObject);
 }
 
+
 async function login() {
     const username = document.querySelector("#userName1");
     const password = document.querySelector("#pass1")
@@ -76,33 +77,25 @@ async function login() {
     }
 }
 
-
-const getPasswordStrenth = () => {
-    console.log("progress bar")
-    return document.querySelector("#pass").value
-}
-
 async function CheckPasswordStrength() {
     console.log("check password");
-    const password = getPasswordStrenth();
+    let password =  document.querySelector("#pass").value
     const progressBar = document.querySelector(".progressBar")
     try {
-        const response = await fetch(`/api/Passwords/CheckPasswordStrength`,
+        const response = await fetch('/api/passwords/CheckPasswordStrength`,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(existUser)
+                body: JSON.stringify(password)
             });
         if (!response.ok) {
-            throw new Error(`HTTP error! status"${response.status}"`)
+            throw new Error(`HTTP error! status ${response.status}`)
         }
         const data = await response.json();
-        
+        console.log(data.Strength)
         progressBar.value = (data.Strength) * 25;
-        if (response.status == 200) { return data.Strength / 4 }
-        else {return 0 }
         console.log('Post data:', data);
         return data;
     }

@@ -8,20 +8,23 @@ using Enteties;
 
 namespace Services
 {
-    public class passwordServices
+    public class passwordServices : IpasswordServices
     {
         public PassEntity GetStrength(string password)
         {
-            var result = Zxcvbn.Core.EvaluatePassword(password);
-            if (result != null)
+            if (password != null && password != "")
             {
-                int strengthPassword = result.Score;
-                PassEntity passEntity = new PassEntity();
-                passEntity.Password = password;
-                passEntity.Strength = strengthPassword;
-                return passEntity;
+                var result = Zxcvbn.Core.EvaluatePassword(password);
+                if (result != null)
+                {
+                    int strengthPassword = result.Score;
+                    PassEntity passEntity = new PassEntity();
+                    passEntity.Password = password;
+                    passEntity.Strength = strengthPassword;
+                    return passEntity;
+                }
             }
             return null;
-        }            
+        }
     }
 }

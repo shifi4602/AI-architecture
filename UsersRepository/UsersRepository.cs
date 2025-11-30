@@ -3,10 +3,14 @@ using Enteties;
 
 namespace Repositories
 {
-    public class UsersRepository
+    public class UsersRepository : IUsersRepository
     {
+
         private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "users.txt");
         
+        public UsersRepository() { }
+        string filePath = "M:\\WebApi\\WebApiShop\\WebApiShop\\users.txt";
+
         public Users AddUser(Users value)
         {
             int numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
