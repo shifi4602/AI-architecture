@@ -2,7 +2,7 @@
 
 namespace Enteties.Controllers
 {
-    public interface IPasswordsControler
+    public interface IPasswordsController
     {
         ActionResult<PassEntity> CheckPasswordStrength([FromBody] string pass);
         void Delete(int id);
