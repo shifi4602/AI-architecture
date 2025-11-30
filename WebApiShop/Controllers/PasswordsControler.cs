@@ -8,21 +8,32 @@ namespace Enteties.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PasswordsControler : ControllerBase, IPasswordsControler
+
+    public class PasswordsController : ControllerBase
+    {
+        private readonly passwordServices _passwordService = new passwordServices();
+
+        // POST api/<PasswordsController>
+        [HttpPost("{pass}")]
+        public ActionResult<PassEntity> CheckPasswordStrength([FromBody] string pass)
+        {
+            PassEntity password = _passwordService.GetStrength(pass);
+
+    public class PasswordsController : ControllerBase, IPasswordsController
     {
         IpasswordServices _iPasswordService;
-        public PasswordsControler(IpasswordServices iPasswordControler)
+        public PasswordsController(IpasswordServices iPasswordController)
         {
-            _iPasswordService = iPasswordControler;
+            _iPasswordService = iPasswordController;
         }
-        // GET: api/<PasswordControler>
+        // GET: api/<PasswordController>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<PasswordControler>/5
+        // GET api/<PasswordController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
@@ -35,26 +46,15 @@ namespace Enteties.Controllers
 
         }
 
-        // POST api/<PasswordControler>
+        // POST api/<PasswordController>
         [HttpPost("CheckPasswordStrength")]
         public ActionResult<PassEntity> CheckPasswordStrength([FromBody] string pass)
         {
             PassEntity password = _iPasswordService.GetStrength(pass);
+
             if (password == null)
-                return NoContent();
+                return BadRequest("Invalid password");
             return Ok(password);
-        }
-
-        // PUT api/<PasswordControler>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<PasswordControler>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

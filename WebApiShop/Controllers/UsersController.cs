@@ -11,6 +11,8 @@ namespace Enteties.Controllers
     [ApiController]
     public class UsersController : ControllerBase, IUsersController
     {
+        private readonly UsersService _usersService = new UsersService();
+
         IUsersService _iUsersServicies;
         IpasswordServices _iPasswordsServices;
 
@@ -28,12 +30,26 @@ namespace Enteties.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<string> Get(int id)
         {
-            return "value";
+            return Ok("value");
         }
 
         // POST api/<UsersController>
+        [HttpPost]
+        public ActionResult<Users> Post([FromBody] Users user)
+        {
+            Users result = _usersService.AddNewUser(user);
+            if (result == null)
+                return BadRequest("Password is not strong enough");
+            return CreatedAtAction(nameof(Get), new { result.Id }, result);
+        }
+
+        [HttpPost("login")]
+        public ActionResult<Users> Login([FromBody] UpdateUser loginUser)
+        {
+            Users user = _usersService.Login(loginUser);
+
         //List<users> user = new List<users>();
 
         [HttpPost]
@@ -51,14 +67,15 @@ namespace Enteties.Controllers
             Users user = _iUsersServicies.Login(value);
             if (user != null)
             {
-                return CreatedAtAction(nameof(Get), new { id = user.id }, user);
+                return Ok(user);
             }
-            else
-                return NoContent();
+            return Unauthorized();
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
+        public ActionResult UpdateUser(int id, [FromBody] Users userToUpdate)
+
         public IActionResult UpdateUser(int id, [FromBody] Users userToUpdate)
         {
             bool passwordsStrenght = _iUsersServicies.UpdateUser(id, userToUpdate);
@@ -74,6 +91,8 @@ namespace Enteties.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _usersService.UpdateUser(id, userToUpdate);
+            return NoContent();
         }
     }
 }

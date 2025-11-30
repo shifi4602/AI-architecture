@@ -4,7 +4,7 @@ namespace Enteties
 {
     public class Users
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         [EmailAddress, Required]
         public string Email { get; set; }
         public string Password { get; set; }
