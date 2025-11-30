@@ -13,10 +13,6 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddScoped<IpasswordServices, passwordServices>();
 
-builder.Services.AddScoped<IPasswordsControler, PasswordsControler>();
-
-builder.Services.AddScoped<IUsersController, UsersController>();
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
