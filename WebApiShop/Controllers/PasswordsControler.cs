@@ -8,10 +8,10 @@ namespace Enteties.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PasswordsControler : ControllerBase, IPasswordsControler
+    public class PasswordsController : ControllerBase
     {
         IpasswordServices _iPasswordService;
-        public PasswordsControler(IpasswordServices iPasswordControler)
+        public PasswordsController(IpasswordServices iPasswordControler)
         {
             _iPasswordService = iPasswordControler;
         }

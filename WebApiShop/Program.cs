@@ -1,5 +1,7 @@
 ﻿using Enteties.Controllers;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
+using Repositories.Models;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,18 +10,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure the HTTP request pipeline.
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IProductReposetory, ProductReposetory>();
 
 builder.Services.AddScoped<IUsersService, UsersService>();
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IpasswordServices, passwordServices>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProtuctService, ProtuctService>();
 
-builder.Services.AddScoped<IPasswordsControler, PasswordsControler>();
-
-builder.Services.AddScoped<IUsersController, UsersController>();
+builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer("Data Source=srv2\\pupils;Initial Catalog=215601303_ApiShop;Integrated Security=True;Trust Server Certificate=True"));
 
 builder.Services.AddControllers();
 
+builder.Services.AddOpenApi();
+
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "My API V1");
+    });
+}
 
 app.UseHttpsRedirection();
 

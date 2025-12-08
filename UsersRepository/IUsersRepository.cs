@@ -1,11 +1,12 @@
 ﻿using Enteties;
+using Repositories.Models;
 
 namespace Repositories
 {
     public interface IUsersRepository
     {
-        Users AddUser(Users value);
-        Users login(UpdateUser value);
-        void UpdateUser(int id, Users userToUpdate);
+        Task<User> AddUser(User user);
+        Task<User> login(UpdateUser updateUser);
+        Task UpdateUserAsync(int id, User userToUpdate);
     }
 }

@@ -9,7 +9,7 @@ namespace Enteties.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase, IUsersController
+    public class UsersController : ControllerBase
     {
         IUsersService _iUsersServicies;
         IpasswordServices _iPasswordsServices;
@@ -37,21 +37,21 @@ namespace Enteties.Controllers
         //List<users> user = new List<users>();
 
         [HttpPost]
-        public ActionResult<Users> Post([FromBody] Users value)
+        public async Task<ActionResult<User>> Post([FromBody] User value)
         {
-            Users user = _iUsersServicies.AddNewUser(value);
+            User user = await _iUsersServicies.AddNewUser(value);
             if (user == null)
                 return BadRequest("Password is too weak");
-            return CreatedAtAction(nameof(Get), new { user.id }, user);
+            return CreatedAtAction(nameof(Get), new { user.Id }, user);
         }
 
         [HttpPost("login")]
-        public ActionResult<Users> login([FromBody] UpdateUser value)
+        public  async Task<ActionResult<User>> login([FromBody] UpdateUser value)
         {
-            Users user = _iUsersServicies.Login(value);
+            User user = await _iUsersServicies.Login(value);
             if (user != null)
             {
-                return CreatedAtAction(nameof(Get), new { id = user.id }, user);
+                return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
             }
             else
                 return NoContent();
@@ -59,9 +59,9 @@ namespace Enteties.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] Users userToUpdate)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] User userToUpdate)
         {
-            bool passwordsStrenght = _iUsersServicies.UpdateUser(id, userToUpdate);
+            bool passwordsStrenght = await _iUsersServicies.UpdateUser(id, userToUpdate);
             if (passwordsStrenght)
             {
                 return Ok(userToUpdate);

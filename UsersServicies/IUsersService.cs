@@ -4,8 +4,8 @@ namespace Services
 {
     public interface IUsersService
     {
-        Users AddNewUser(Users user);
-        Users Login(UpdateUser user);
-        bool UpdateUser(int id, Users userToUpdate);
+        Task<User> AddNewUser(User user);
+        Task<User> Login(UpdateUser user);
+        Task<bool> UpdateUser(int id, User userToUpdate);
     }
 }

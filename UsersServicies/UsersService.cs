@@ -13,25 +13,25 @@ namespace Services
             _iUsersRepository = usersRepository;
             _iPasswordServices = passwordServices;
         }
-        public Users AddNewUser(Users user)
+        public async Task<User> AddNewUser(User user)
         {
             if (_iPasswordServices.GetStrength(user.Password).Strength <= 2)
                 return null;
-            return _iUsersRepository.AddUser(user);
+            return await _iUsersRepository.AddUser(user);
         }
 
-        public Users Login(UpdateUser user)
+        public  async Task<User> Login(UpdateUser user)
         {
-            return _iUsersRepository.login(user);
+            return await _iUsersRepository.login(user);
         }
 
-        public bool UpdateUser(int id, Users userToUpdate)
+        public async Task<bool> UpdateUser(int id, User userToUpdate)
         {
             if (_iPasswordServices.GetStrength(userToUpdate.Password).Strength <= 2)
             {
                 return false;
             }
-            _iUsersRepository.UpdateUser(id, userToUpdate);
+            _iUsersRepository.UpdateUserAsync(id, userToUpdate);
             return true;
 
         }

@@ -1,57 +1,34 @@
-﻿using System.Text.Json;
-using Enteties;
+﻿using Enteties;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Models;
+using System.Linq;
+using System.Text.Json;
 
 namespace Repositories
 {
     public class UsersRepository : IUsersRepository
     {
-        public UsersRepository() { }
-        string filePath = "M:\\WebApi\\WebApiShop\\WebApiShop\\users.txt";
-        public Users AddUser(Users value)
+        ApiShopContext _apiShopContext;
+        public UsersRepository(ApiShopContext apiShopContext)
         {
-            int numberOfUsers = System.IO.File.ReadLines(filePath).Count();
-            value.id = numberOfUsers + 1;
-            string userJson = JsonSerializer.Serialize(value);
-            System.IO.File.AppendAllText(filePath, userJson + Environment.NewLine);
-            return value;
+            _apiShopContext = apiShopContext;
+        }
+        public async Task<User> AddUser(User user)
+        {
+            await _apiShopContext.Users.AddAsync(user);
+            await _apiShopContext.SaveChangesAsync();
+            return user;
         }
 
-        public Users login(UpdateUser value)
+        public async Task<User> login(UpdateUser updateUser)
         {
-            using (StreamReader reader = System.IO.File.OpenText(filePath))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    Users userFromFile = JsonSerializer.Deserialize<Users>(currentUserInFile);
-                    if (userFromFile.Email == value.Email && userFromFile.Password == value.Password)
-                        return userFromFile;
-                }
-            }
-            return null;
+            return await _apiShopContext.Users.FirstOrDefaultAsync(x => x.Email == updateUser.Email && x.Password == updateUser.Password);
         }
 
-        public void UpdateUser(int id, Users userToUpdate)
+        public async Task UpdateUserAsync(int id, User userToUpdate)
         {
-            string textToReplace = string.Empty;
-            using (StreamReader reader = System.IO.File.OpenText(filePath))
-            {
-                string currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-
-                    Users user = JsonSerializer.Deserialize<Users>(currentUserInFile);
-                    if (user.id == id)
-                        textToReplace = currentUserInFile;
-                }
-            }
-
-            if (textToReplace != string.Empty)
-            {
-                string text = System.IO.File.ReadAllText(filePath);
-                text = text.Replace(textToReplace, JsonSerializer.Serialize(userToUpdate));
-                System.IO.File.WriteAllText(filePath, text);
-            }
+            _apiShopContext.Users.Update(userToUpdate);
+            await _apiShopContext.SaveChangesAsync();
         }
     }
 }
