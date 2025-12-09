@@ -9,34 +9,28 @@ namespace Enteties.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class UsersController : ControllerBase
     {
         IUsersService _iUsersServicies;
         IpasswordServices _iPasswordsServices;
-
+        
         public UsersController(IUsersService usersServicies, IpasswordServices passwordServices)
         {
             _iPasswordsServices = passwordServices;
             _iUsersServicies = usersServicies;
         }
         
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<string> Get(int id)
         {
-            return "value";
+            return Ok("value");
         }
-
+        
         // POST api/<UsersController>
-        //List<users> user = new List<users>();
-
         [HttpPost]
+
         public async Task<ActionResult<User>> Post([FromBody] User value)
         {
             User user = await _iUsersServicies.AddNewUser(value);
@@ -44,7 +38,7 @@ namespace Enteties.Controllers
                 return BadRequest("Password is too weak");
             return CreatedAtAction(nameof(Get), new { user.Id }, user);
         }
-
+        
         [HttpPost("login")]
         public  async Task<ActionResult<User>> login([FromBody] UpdateUser value)
         {
@@ -53,10 +47,9 @@ namespace Enteties.Controllers
             {
                 return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
             }
-            else
-                return NoContent();
+            return Unauthorized();
         }
-
+        
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User userToUpdate)
@@ -67,13 +60,7 @@ namespace Enteties.Controllers
                 return Ok(userToUpdate);
             }
             return NoContent();
-
-        }
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+        
         }
     }
 }

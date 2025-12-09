@@ -1,4 +1,4 @@
-﻿async function update() {
+async function update() {
     const username = document.querySelector("#userName");
     const password = document.querySelector("#pass")
     const firstName = document.querySelector("#firstName")
