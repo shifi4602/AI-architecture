@@ -22,6 +22,8 @@ builder.Services.AddScoped<IProtuctService, ProtuctService>();
 
 builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer("Data Source=srv2\\pupils;Initial Catalog=215601303_ApiShop;Integrated Security=True;Trust Server Certificate=True"));
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
@@ -36,6 +38,8 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json", "My API V1");
     });
 }
+
+
 
 app.UseHttpsRedirection();
 
