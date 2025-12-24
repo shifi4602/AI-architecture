@@ -1,11 +1,12 @@
-﻿using Enteties;
+﻿using DTO_s;
+using Enteties;
 
 namespace Services
 {
     public interface IUsersService
     {
-        Task<User> AddNewUser(User user);
-        Task<User> Login(UpdateUser user);
-        Task<bool> UpdateUser(int id, User userToUpdate);
+        Task<UserDTO> AddNewUser(UserDTO userDTO, string password);
+        Task<User> Login(ExisitingUser user);
+        Task<bool> UpdateUser(int id, UserDTO userToUpdate, string password);
     }
 }

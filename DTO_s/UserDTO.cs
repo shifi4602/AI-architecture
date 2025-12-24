@@ -2,7 +2,8 @@
 {
     public record UserDTO
     (
-        int Id,
+        int id,
+        //string password,
         string FirstName,
         string LastName,
         string Email

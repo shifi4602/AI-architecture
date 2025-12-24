@@ -4,6 +4,7 @@ using System.Text.Json;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 using Services;
+using DTO_s;
 
 namespace Enteties.Controllers
 {
@@ -31,16 +32,16 @@ namespace Enteties.Controllers
         // POST api/<UsersController>
         [HttpPost]
 
-        public async Task<ActionResult<User>> Post([FromBody] User value)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] UserDTO value, string password)
         {
-            User user = await _iUsersServicies.AddNewUser(value);
+            UserDTO user = await _iUsersServicies.AddNewUser(value, password);
             if (user == null)
                 return BadRequest("Password is too weak");
-            return CreatedAtAction(nameof(Get), new { user.Id }, user);
+            return CreatedAtAction(nameof(Get), new { user.id }, user);
         }
         
         [HttpPost("login")]
-        public  async Task<ActionResult<User>> login([FromBody] UpdateUser value)
+        public  async Task<ActionResult<User>> login([FromBody] ExisitingUser value)
         {
             User user = await _iUsersServicies.Login(value);
             if (user != null)
@@ -52,9 +53,9 @@ namespace Enteties.Controllers
         
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User userToUpdate)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDTO userToUpdate, string password)
         {
-            bool passwordsStrenght = await _iUsersServicies.UpdateUser(id, userToUpdate);
+            bool passwordsStrenght = await _iUsersServicies.UpdateUser(id, userToUpdate, password);
             if (passwordsStrenght)
             {
                 return Ok(userToUpdate);

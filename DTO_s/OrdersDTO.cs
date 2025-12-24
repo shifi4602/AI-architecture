@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Enteties;
 
 namespace DTO_s
 {
@@ -11,8 +12,7 @@ namespace DTO_s
         int OrderId,
         DateOnly? OrderDate,
         int OrderSum,
-        int UserId,
-        string UserFirstName,
-        string UserLastName
+        int orderId
+        //IEnumerable<OrderItemDTO> ordersItem
     );
 }
