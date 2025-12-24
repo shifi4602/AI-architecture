@@ -15,11 +15,13 @@ namespace Enteties.Controllers
     {
         IUsersService _iUsersServicies;
         IpasswordServices _iPasswordsServices;
+        private readonly ILogger<UsersController> _logger;
         
-        public UsersController(IUsersService usersServicies, IpasswordServices passwordServices)
+        public UsersController(IUsersService usersServicies, IpasswordServices passwordServices, ILogger<UsersController> logger)
         {
             _iPasswordsServices = passwordServices;
             _iUsersServicies = usersServicies;
+            _logger = logger;
         }
         
         // GET api/<UsersController>/5
@@ -46,8 +48,10 @@ namespace Enteties.Controllers
             User user = await _iUsersServicies.Login(value);
             if (user != null)
             {
+                _logger.LogInformation("Login attempted with User Email: " + value.Email  + "and password: " + value.Password);
                 return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
             }
+            _logger.LogError("Error in getting user");
             return Unauthorized();
         }
         
@@ -60,8 +64,7 @@ namespace Enteties.Controllers
             {
                 return Ok(userToUpdate);
             }
-            return NoContent();
-        
+            return NoContent();        
         }
     }
 }
