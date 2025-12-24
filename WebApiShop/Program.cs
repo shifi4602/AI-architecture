@@ -20,7 +20,7 @@ builder.Services.AddScoped<IpasswordServices, passwordServices>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProtuctService, ProtuctService>();
 
-builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer("Data Source=srv2\\pupils;Initial Catalog=215601303_ApiShop;Integrated Security=True;Trust Server Certificate=True"));
+builder.Services.AddDbContext<ApiShopContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("School")));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
