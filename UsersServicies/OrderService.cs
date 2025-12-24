@@ -23,15 +23,15 @@ namespace Services
         public async Task<OrdersDTO> GetOrderById(int id)
         {
             Order order = await _iOrdersRepository.GetOrderById(id);
-            OrdersDTO orderDto = _mapper.Map<Order, OrdersDTO>(order);
-            return orderDto;
+            OrdersDTO orderDTO = _mapper.Map<Order, OrdersDTO>(order);
+            return orderDTO;
         }
-        public async Task<OrdersDTO> AddNewOrder(OrdersDTO orderDto)
+        public async Task<OrdersDTO> AddNewOrder(OrdersDTO orderDTO)
         {
-            Order order = _mapper.Map<OrdersDTO, Order>(orderDto);
-            Order order1 = await _iOrdersRepository.AddOrder(order);
-            OrdersDTO orderDto1 = _mapper.Map<Order, OrdersDTO>(order1);
-            return orderDto1;
+            Order order = _mapper.Map<OrdersDTO, Order>(orderDTO);
+            Order orderRes = await _iOrdersRepository.AddOrder(order);
+            OrdersDTO orderDtoRes = _mapper.Map<Order, OrdersDTO>(orderRes);
+            return orderDtoRes;
         }
     }
 }

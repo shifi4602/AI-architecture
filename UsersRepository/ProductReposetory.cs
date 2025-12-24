@@ -17,7 +17,7 @@ namespace Repositories
             _apiShopContext = apiShopContext;
         }
 
-        public async Task<IEnumerable<Product>> GetProducts(string? name, int[]? categories, int? nimPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
+        public async Task<List<Product>> GetProducts(string? name, int[]? categories, int? nimPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
         {
             return await _apiShopContext.Products.ToListAsync();
         }

@@ -16,9 +16,10 @@ namespace Repositories
         {
             _apiShopContext = apiShopContext;
         }
+        //repository
         public async Task<Order> GetOrderById(int id)
         {
-            return await _apiShopContext.Orders.FindAsync(id);
+            return await _apiShopContext.Orders.Include(o => o.OrderItems).ThenInclude(o => o.Product).FirstOrDefaultAsync(o => o.OrderId == id);
         }
         public async Task<Order> AddOrder(Order order)
         {

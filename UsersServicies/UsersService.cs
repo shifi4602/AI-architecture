@@ -17,15 +17,14 @@ namespace Services
             _passwordServices = passwordServices;
             _mapper = imapper;
         }
-        public async Task<UserDTO> AddNewUser(UserDTO userdto, string password)
+        public async Task<UserDTO> AddNewUser(UserDTO userDTO)
         {
-            User user = _mapper.Map<UserDTO, User>(userdto);
-            user.Password = password;
+            User user = _mapper.Map<UserDTO, User>(userDTO);
             User userResult = await _iUsersRepository.AddUser(user);
-            UserDTO userDTO = _mapper.Map<User, UserDTO>(userResult);
+            UserDTO userDTOres = _mapper.Map<User, UserDTO>(userResult);
             if (_passwordServices.GetStrength(user.Password).Strength <= 2)
                 return null;
-            return userDTO;
+            return userDTOres;
         }
 
         public async Task<User> Login(ExisitingUser user)
@@ -35,13 +34,14 @@ namespace Services
 
         public async Task<bool> UpdateUser(int id, UserDTO userToUpdate, string password)
         {
-            User user = _mapper.Map<UserDTO, User>(userToUpdate);
-            user.Password = password;
-            if (_passwordServices.GetStrength(user.Password).Strength <= 2)
+            if (_passwordServices.GetStrength(password).Strength <= 2)
             {
                 return false;
             }
-            await _iUsersRepository.UpdateUserAsync(id, user);
+            User user = _mapper.Map<UserDTO, User>(userToUpdate);
+            user.Id = id;
+            user.Password = password;
+            await _iUsersRepository.UpdateUserAsync(user);
             return true;
         }
 

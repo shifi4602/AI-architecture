@@ -1,4 +1,5 @@
-﻿using Enteties;
+﻿using DTO_s;
+using Enteties;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -17,7 +18,7 @@ namespace WebApiShop.Controllers
         }
         // GET: api/<ProductsController>
         [HttpGet]
-        public async Task<IEnumerable<Product>> GetProducts(string? name, int[]? categories, int? minPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
+        public async Task<IEnumerable<ProductDTO>> GetProducts(string? name, int[]? categories, int? minPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
         {
             return await _iProtuctService.GetProducts(name, categories, minPrice,maxPrice, limit, orderBy, offset);
         }
