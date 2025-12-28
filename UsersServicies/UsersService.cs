@@ -45,6 +45,11 @@ namespace Services
             return true;
         }
 
-
+        public async Task<UserDTO> GetById(int id)
+        {
+            User user = await _iUsersRepository.GetById(id);
+            UserDTO userDTO = _mapper.Map<User, UserDTO>(user);
+            return userDTO;
+        }
     }
 }

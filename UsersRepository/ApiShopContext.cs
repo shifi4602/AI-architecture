@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Enteties;
 
-namespace Repositories.Models;
+namespace Repositories;
 
 public partial class ApiShopContext : DbContext
 {
+    public ApiShopContext() { }
     public ApiShopContext(DbContextOptions<ApiShopContext> options)
         : base(options)
     {

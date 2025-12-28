@@ -1,7 +1,7 @@
 ﻿using Enteties.Controllers;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
-using Repositories.Models;
+using Repositories;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);

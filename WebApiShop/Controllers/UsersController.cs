@@ -66,5 +66,16 @@ namespace Enteties.Controllers
             }
             return NoContent();        
         }
+
+        // GET api/<UsersController>/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<string>> GetById(int id)
+        {
+            UserDTO user = await _iUsersServicies.GetById(id);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
     }
 }

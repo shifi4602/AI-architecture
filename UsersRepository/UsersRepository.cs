@@ -1,6 +1,6 @@
 ﻿using Enteties;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Models;
+using Repositories;
 using System.Linq;
 using System.Text.Json;
 
@@ -30,5 +30,13 @@ namespace Repositories
             _apiShopContext.Users.Update(userToUpdate);
             await _apiShopContext.SaveChangesAsync();
         }
+
+        public async Task<User> GetById(int id)
+        {
+            return await _apiShopContext.Users.FindAsync(id);
+        }
+
     }
 }
+
+
