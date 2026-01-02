@@ -6,7 +6,7 @@ using Repositories;
 using Enteties;
 using Xunit;
 
-namespace Repositories.Tests
+namespace TestProject
 {
     // Integration-style tests against EF Core InMemory provider.
     // IAsyncLifetime provides async per-test setup/teardown hooks.

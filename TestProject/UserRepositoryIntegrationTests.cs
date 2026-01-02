@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Enteties;
 
-namespace Repositories.Tests
+namespace TestProject
 {
     // Each test gets a fresh test-class instance in xUnit,
     // so IAsyncLifetime runs before/after each test (per-test setup/teardown).

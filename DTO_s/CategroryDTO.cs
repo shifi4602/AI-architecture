@@ -8,6 +8,7 @@ namespace DTO_s
 {
     public record CategroryDTO
     (
+        int CategoryId,
         string CategoryName
     );
 }

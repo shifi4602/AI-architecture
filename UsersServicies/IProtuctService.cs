@@ -5,6 +5,6 @@ namespace Services
 {
     public interface IProtuctService
     {
-        Task<IEnumerable<ProductDTO>> GetProducts(string? name, int[]? categories, int? minPrice, int? maxPrice, int? limit, string? orderBy, int? offset);
+        Task<ProductRespone<ProductDTO>> GetProducts(int position, int skip, string? name, string description, int[]? categories, int? minPrice, int? maxPrice, string? orderBy);
     }
 }

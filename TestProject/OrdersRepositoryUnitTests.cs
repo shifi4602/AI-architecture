@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Repositories.Tests
+namespace TestProject
 {
     // Integration-style tests against EF Core InMemory provider.
     // IAsyncLifetime provides async per-test setup/teardown hooks.
@@ -78,6 +78,56 @@ namespace Repositories.Tests
             // Assert
             Assert.Null(result);
         }
+
+        //[Fact]
+        //public async Task GetOrderById_ReturnsOrder_WhenIdIsCorrect()
+        //{
+        //    // Arrange
+        //    var orderId = 10;
+        //    var orders = new List<Order>
+        //    {
+        //        new Order
+        //        {
+        //            OrderId = orderId,
+        //            UserId = 1,
+        //            OrderItems = new List<OrderItem> { new OrderItem { OrderId = 1, ProductId = 101 } }
+        //        },
+        //        new Order { OrderId = 11, UserId = 2 }
+        //    };
+
+        //    var mockContext = new Mock<ApiShopContext>();
+        //    mockContext.Setup(x => x.Orders).Returns(orders);
+
+        //    var repository = new OrdersRepository(mockContext.Object);
+
+        //    // Act
+        //    var result = await repository.GetOrderById(orderId);
+
+        //    // Assert
+        //    Assert.NotNull(result);
+        //    Assert.Equal(orderId, result.OrderId);
+        //    Assert.Single(result.OrderItems);
+        //}
+        //[Fact]
+        //public async Task GetOrderById_ReturnsNull_WhenIdIsIncorrect()
+        //{
+        //    // Arrange
+        //    var orders = new List<Order>
+        //    {
+        //        new Order { OrderId = 1, UserId = 1 }
+        //    };
+
+        //    var mockContext = new Mock<ApiShopContext>();
+        //    mockContext.Setup(x => x.Orders).Returns(orders);
+
+        //    var repository = new OrdersRepository(mockContext.Object);
+
+        //    // Act
+        //    var result = await repository.GetOrderById(999);
+
+        //    // Assert
+        //    Assert.Null(result);
+        //}
 
         [Fact]
         public async Task AddOrder_ReturnsOrder_WhenOrderIsAdded()

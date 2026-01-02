@@ -7,7 +7,7 @@ using Repositories;
 using Enteties;
 using Xunit;
 
-namespace Repositories.Tests
+namespace TestProject
 {
     public class CategoryRepositoryTests //: IDisposable
     {

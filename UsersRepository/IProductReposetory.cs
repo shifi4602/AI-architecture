@@ -4,6 +4,6 @@ namespace Repositories
 {
     public interface IProductReposetory
     {
-        Task<List<Product>> GetProducts(string? name, int[]? categories, int? nimPrice, int? maxPrice, int? limit, string? orderBy, int? offset);
+        Task<(List<Product> Items, int TotalCount)> GetProducts(int position, int skip, string? name, string? description, int[]? categories, int? nimPrice, int? maxPrice, string? orderBy);
     }
 }

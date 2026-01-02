@@ -19,12 +19,17 @@ namespace Services
             _iProductReposetory = iProductReposetory;
             _mapper = imapper;
         }
-        public async Task<IEnumerable<ProductDTO>> GetProducts(string? name, int[]? categories, int? minPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
+        public async Task<ProductRespone<ProductDTO>> GetProducts(int position, int skip, string? name, string description, int[]? categories, int? minPrice, int? maxPrice, string? orderBy)
         {
-            //return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(await _iProductReposetory.GetProducts(name, categories, minPrice, maxPrice, limit, orderBy, offset));
-            IEnumerable<Product> products = await _iProductReposetory.GetProducts(name, categories, minPrice, maxPrice, limit, orderBy, offset);
-            IEnumerable<ProductDTO> productDTOs = _mapper.Map<IEnumerable<Product>,IEnumerable<ProductDTO>>(products);
-            return productDTOs;
-        }
+            List<Product> products;
+            ProductRespone<ProductDTO> pageResponse = new ProductRespone<ProductDTO>();
+            (products, pageResponse.TotalItems) = await _iProductReposetory.GetProducts(position, skip, name, description, categories, minPrice, maxPrice, orderBy);
+            pageResponse.Data = _mapper.Map<List<Product>, List<ProductDTO>>(products);
+            pageResponse.CurrentPage = position;
+            pageResponse.HasPreviousPage = pageResponse.CurrentPage > 1;
+            pageResponse.HasNextPage = (pageResponse.TotalItems / skip) > (pageResponse.CurrentPage - 1);
+            pageResponse.PageSize = skip;
+            return pageResponse;
+}
     }
 }

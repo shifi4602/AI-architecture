@@ -1,5 +1,6 @@
 ﻿using DTO_s;
 using Enteties;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -18,9 +19,13 @@ namespace WebApiShop.Controllers
         }
         // GET: api/<ProductsController>
         [HttpGet]
-        public async Task<IEnumerable<ProductDTO>> GetProducts(string? name, int[]? categories, int? minPrice, int? maxPrice, int? limit, string? orderBy, int? offset)
+        public async Task<ActionResult<ProductRespone<ProductDTO>>> Get(int position, int skip, string? name,  [FromQuery] int[]? categoryIds, string? description, int? maxPrice, int? minPrice, string? orderBy)
         {
-            return await _iProtuctService.GetProducts(name, categories, minPrice,maxPrice, limit, orderBy, offset);
+            //ProductRespone<ProductDTO> pageResponse = await _iProtuctService.GetProducts(position, skip, name, description, categoryIds, minPrice, maxPrice, orderBy);
+            //if (pageResponse.Data.Count() > 0)
+            //    return Ok(pageResponse);
+            //return NoContent();
+            return await _iProtuctService.GetProducts(position, skip, name, description, categoryIds, minPrice, maxPrice, orderBy);
         }
     }
 }

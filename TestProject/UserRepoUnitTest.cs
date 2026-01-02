@@ -5,7 +5,7 @@ using Repositories;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Repositories.Tests
+namespace TestProject
 {
     public class UsersRepositoryTests
     {
