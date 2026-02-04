@@ -17,9 +17,10 @@ namespace Services
             _passwordServices = passwordServices;
             _mapper = imapper;
         }
-        public async Task<UserDTO> AddNewUser(UserDTO userDTO)
+        public async Task<UserDTO> AddNewUser(UserDTO userDTO, string password)
         {
             User user = _mapper.Map<UserDTO, User>(userDTO);
+            user.Password = password;
             User userResult = await _iUsersRepository.AddUser(user);
             UserDTO userDTOres = _mapper.Map<User, UserDTO>(userResult);
             if (_passwordServices.GetStrength(user.Password).Strength <= 2)

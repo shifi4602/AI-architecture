@@ -34,9 +34,9 @@ namespace Enteties.Controllers
         // POST api/<UsersController>
         [HttpPost]
 
-        public async Task<ActionResult<UserDTO>> Post([FromBody] UserDTO value)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] UserDTO value, string password)
         {
-            UserDTO user = await _iUsersServicies.AddNewUser(value);
+            UserDTO user = await _iUsersServicies.AddNewUser(value, password);
             if (user == null)
                 return BadRequest("Password is too weak");
             return CreatedAtAction(nameof(Get), new { user.id }, user);

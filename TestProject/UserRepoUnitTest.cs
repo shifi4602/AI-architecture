@@ -45,7 +45,7 @@ namespace TestProject
             var user = new User { Email = "user1@test.com", FirstName = "a", LastName = "b", Password = "password1" };
             await _repository.AddUser(user);
 
-            var loginUser = new ExisitingUser { Email = "user1@test.com", Password = "password1" };
+            var loginUser = new ExisitingUser1 { Email = "user1@test.com", Password = "password1" };
 
             // Act
             var result = await _repository.login(loginUser.Email, loginUser.Password);
@@ -63,7 +63,7 @@ namespace TestProject
             var user = new User { Email = "user1@test.com", FirstName = "a", LastName = "b", Password = "password1" };
             await _repository.AddUser(user);
 
-            var loginUser = new ExisitingUser { Email = "user1@test.com", Password = "wrongpassword" };
+            var loginUser = new ExisitingUser1 { Email = "user1@test.com", Password = "wrongpassword" };
 
             // Act
             var result = await _repository.login(loginUser.Email, loginUser.Password);

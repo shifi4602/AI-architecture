@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Enteties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,10 @@ namespace DTO_s
 {
     public record ProductDTO
     (
-        int ProductId,
+        int ProductsId,
         string ProductName,
         int Price,
-        CategroryDTO Categrory, 
-        string Description
+        string Description,
+        int CategoryId
     );
 }
