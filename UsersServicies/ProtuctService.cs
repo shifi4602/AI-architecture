@@ -30,6 +30,13 @@ namespace Services
             pageResponse.HasNextPage = (pageResponse.TotalItems / skip) > (pageResponse.CurrentPage - 1);
             pageResponse.PageSize = skip;
             return pageResponse;
-}
+        }
+
+        public async Task<ProductDTO?> GetProductById(int id)
+        {
+            var product = await _iProductReposetory.GetProductById(id);
+            if (product == null) return null;
+            return _mapper.Map<ProductDTO>(product);
+        }
     }
 }
