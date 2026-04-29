@@ -28,6 +28,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 
+var redisConnectionString = builder.Configuration["RedisCache:ConnectionString"] ?? "localhost:6379,password=S9v#3mL@8qT!2xN$7rKpZ4dH,abortConnect=false";
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = redisConnectionString;
+    options.InstanceName = "WebApiShop:";
+});
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

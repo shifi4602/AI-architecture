@@ -1,0 +1,10 @@
+version: '3'
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    environment:
+      - REDIS_PASSWORD = S9v#3mL@8qT!2xN$7rKpZ4dH  # Strong Redis password
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "S9v#3mL@8qT!2xN$7rKpZ4dH"]  # Starts Redis with password auth
