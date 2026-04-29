@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System.Text.Json;
+using StackExchange.Redis;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,16 +18,19 @@ namespace WebApiShop.Controllers
         IProtuctService _iProtuctService;
         private readonly IDistributedCache _cache;
         private readonly IConfiguration _configuration;
+        private readonly IConnectionMultiplexer _redis;
 
-        public ProductsController(IProtuctService iProtuctService, IDistributedCache cache, IConfiguration configuration)
+        public ProductsController(IProtuctService iProtuctService, IDistributedCache cache, IConfiguration configuration, IConnectionMultiplexer redis)
         {
             _iProtuctService = iProtuctService;
             _cache = cache;
             _configuration = configuration;
+            _redis = redis;
         }
+
         // GET: api/<ProductsController>
         [HttpGet]
-        public async Task<ActionResult<ProductRespone<ProductDTO>>> Get(int position, int skip, string? name,  [FromQuery] int[]? categoryIds, string? description, int? maxPrice, int? minPrice, string? orderBy)
+        public async Task<ActionResult<ProductRespone<ProductDTO>>> Get(int position, int skip, string? name, [FromQuery] int[]? categoryIds, string? description, int? maxPrice, int? minPrice, string? orderBy)
         {
             var cacheKey = BuildProductsCacheKey(position, skip, name, categoryIds, description, maxPrice, minPrice, orderBy);
             var cachedValue = await _cache.GetStringAsync(cacheKey);
@@ -56,15 +60,7 @@ namespace WebApiShop.Controllers
             return Ok(response);
         }
 
-        private static string BuildProductsCacheKey(int? position, int? skip, string? name, int[]? categoryIds, string? description, int? maxPrice, int? minPrice, string? orderBy)
-        {
-            var orderedCategories = categoryIds == null || categoryIds.Length == 0
-                ? "none"
-                : string.Join(",", categoryIds.OrderBy(x => x));
-
-            return $"products:p={position ?? 1}:s={skip ?? 6}:n={name ?? string.Empty}:c={orderedCategories}:d={description ?? string.Empty}:max={maxPrice?.ToString() ?? string.Empty}:min={minPrice?.ToString() ?? string.Empty}:o={orderBy ?? string.Empty}";
-        }
-
+        // GET api/<ProductsController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDTO>> GetById(int id)
         {
@@ -81,8 +77,7 @@ namespace WebApiShop.Controllers
                 }
             }
 
-            // Cache miss: read from DB/service layer.
-            ProductDTO product = await _iProtuctService.GetProductById(id);
+            ProductDTO? product = await _iProtuctService.GetProductById(id);
             if (product == null)
                 return NotFound();
 
@@ -96,6 +91,56 @@ namespace WebApiShop.Controllers
             await _cache.SetStringAsync(cacheKey, serializedProduct, cacheOptions);
 
             return Ok(product);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProductDTO>> Post([FromBody] ProductDTO productDTO)
+        {
+            var created = await _iProtuctService.AddProduct(productDTO);
+            await InvalidateProductListCacheAsync();
+            return CreatedAtAction(nameof(GetById), new { id = created.ProductsId }, created);
+        }
+
+        // PUT api/<ProductsController>/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] ProductDTO productDTO)
+        {
+            var updated = await _iProtuctService.UpdateProduct(id, productDTO);
+            if (!updated)
+                return NotFound();
+            await _cache.RemoveAsync($"product:id={id}");
+            await InvalidateProductListCacheAsync();
+            return NoContent();
+        }
+
+        // DELETE api/<ProductsController>/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _iProtuctService.DeleteProduct(id);
+            if (!deleted)
+                return NotFound();
+            await _cache.RemoveAsync($"product:id={id}");
+            await InvalidateProductListCacheAsync();
+            return NoContent();
+        }
+
+        private static string BuildProductsCacheKey(int? position, int? skip, string? name, int[]? categoryIds, string? description, int? maxPrice, int? minPrice, string? orderBy)
+        {
+            var orderedCategories = categoryIds == null || categoryIds.Length == 0
+                ? "none"
+                : string.Join(",", categoryIds.OrderBy(x => x));
+
+            return $"products:p={position ?? 1}:s={skip ?? 6}:n={name ?? string.Empty}:c={orderedCategories}:d={description ?? string.Empty}:max={maxPrice?.ToString() ?? string.Empty}:min={minPrice?.ToString() ?? string.Empty}:o={orderBy ?? string.Empty}";
+        }
+
+        private async Task InvalidateProductListCacheAsync()
+        {
+            var db = _redis.GetDatabase();
+            var server = _redis.GetServer(_redis.GetEndPoints().First());
+            var keys = server.Keys(pattern: "WebApiShop:products:*").ToArray();
+            if (keys.Length > 0)
+                await db.KeyDeleteAsync(keys);
         }
     }
 }

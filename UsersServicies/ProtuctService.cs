@@ -38,5 +38,24 @@ namespace Services
             if (product == null) return null;
             return _mapper.Map<ProductDTO>(product);
         }
+
+        public async Task<ProductDTO> AddProduct(ProductDTO productDTO)
+        {
+            var product = _mapper.Map<Product>(productDTO);
+            var result = await _iProductReposetory.AddProduct(product);
+            return _mapper.Map<ProductDTO>(result);
+        }
+
+        public async Task<bool> UpdateProduct(int id, ProductDTO productDTO)
+        {
+            var product = _mapper.Map<Product>(productDTO);
+            product.ProductsId = id;
+            return await _iProductReposetory.UpdateProduct(product);
+        }
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+            return await _iProductReposetory.DeleteProduct(id);
+        }
     }
 }

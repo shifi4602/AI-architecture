@@ -58,5 +58,33 @@ namespace Repositories
         {
             return await _apiShopContext.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.ProductsId == id);
         }
+
+        public async Task<Product> AddProduct(Product product)
+        {
+            _apiShopContext.Products.Add(product);
+            await _apiShopContext.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<bool> UpdateProduct(Product product)
+        {
+            var existing = await _apiShopContext.Products.FindAsync(product.ProductsId);
+            if (existing == null) return false;
+            existing.ProductName = product.ProductName;
+            existing.Price = product.Price;
+            existing.CategoryId = product.CategoryId;
+            existing.Description = product.Description;
+            await _apiShopContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+            var existing = await _apiShopContext.Products.FindAsync(id);
+            if (existing == null) return false;
+            _apiShopContext.Products.Remove(existing);
+            await _apiShopContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

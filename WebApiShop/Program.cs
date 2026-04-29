@@ -35,6 +35,11 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.InstanceName = "WebApiShop:";
 });
 
+builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(
+    StackExchange.Redis.ConnectionMultiplexer.Connect(redisConnectionString));
+
+builder.Services.AddFixedWindowRateLimiting();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -50,6 +55,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseFixedWindowRateLimiting();
+
 app.UseErrorHandling();
 
 app.UseRating();
@@ -58,7 +65,7 @@ app.UseStaticFiles();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("fixed");
 
 app.Run();
 
