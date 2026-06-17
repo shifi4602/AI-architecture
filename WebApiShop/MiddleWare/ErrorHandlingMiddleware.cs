@@ -19,7 +19,9 @@
             catch (Exception ex)
             {
                 httpContext.Response.StatusCode = 500;
+                httpContext.Response.ContentType = "application/json";
                 _logger.LogError(ex + " call stack: " + ex.StackTrace);
+                await httpContext.Response.WriteAsync("{\"error\":\"An unexpected error occurred.\"}");
             }
         }
     }
