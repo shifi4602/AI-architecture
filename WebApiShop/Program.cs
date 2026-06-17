@@ -5,12 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Services;
+using Services.Configuration;
 using System.Text;
 using WebApiShop.MiddleWare;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<KafkaOptions>(
+    builder.Configuration.GetSection(KafkaOptions.SectionName));
+builder.Services.AddSingleton<IKafkaProducerService, KafkaProducerService>();
 
 // Configure the HTTP request pipeline.
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
