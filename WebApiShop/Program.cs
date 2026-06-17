@@ -72,6 +72,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(
     StackExchange.Redis.ConnectionMultiplexer.Connect(redisConnectionString));
 
+builder.Services.Configure<RedisCacheSettingsOptions>(builder.Configuration.GetSection("RedisCache"));
 builder.Services.AddFixedWindowRateLimiting();
 
 builder.Services.AddOpenApi();
